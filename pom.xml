@@ -29,6 +29,10 @@
                             <pattern>fr.zcraft.zlib</pattern>
                             <shadedPattern>fr.moribus.imageonmap</shadedPattern>
                         </relocation>
+                        <relocation>
+                            <pattern>org.bstats</pattern>
+                            <shadedPattern>fr.moribus.imageonmap</shadedPattern>
+                        </relocation>
                     </relocations>
                 </configuration>
                 <executions>
@@ -52,6 +56,10 @@
             <id>jitpack.io</id>
             <url>https://jitpack.io</url>
         </repository>
+        <repository>
+            <id>bstats-repo</id>
+            <url>http://repo.bstats.org/content/repositories/releases/</url>
+        </repository>
     </repositories>
 
     <dependencies>
@@ -64,6 +72,12 @@
             <groupId>com.github.zDevelopers</groupId>
             <artifactId>zLib</artifactId>
             <version>b54749d6f9</version>
+        </dependency>
+        <dependency>
+            <groupId>org.bstats</groupId>
+            <artifactId>bstats-bukkit</artifactId>
+            <version>1.2</version>
+            <scope>compile</scope>
         </dependency>
     </dependencies>
 </project>
