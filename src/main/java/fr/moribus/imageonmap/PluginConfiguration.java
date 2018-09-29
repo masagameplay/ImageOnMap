@@ -1,7 +1,7 @@
 /*
  * Copyright (C) 2013 Moribus
  * Copyright (C) 2015 ProkopyL <prokopylmc@gmail.com>
- *
+ * Copyright (C) 2018 Masa
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
@@ -26,11 +26,10 @@ import java.util.Locale;
 import static fr.zcraft.zlib.components.configuration.ConfigurationItem.item;
 
 
-public final class PluginConfiguration extends Configuration
-{
-    static public ConfigurationItem<Locale> LANG = item("lang", Locale.class);
+public final class PluginConfiguration extends Configuration {
+    static ConfigurationItem<Locale> LANG = item("lang", Locale.class);
 
-    static public ConfigurationItem<Boolean> COLLECT_DATA = item("collect-data", true);
+    static ConfigurationItem<Boolean> COLLECT_DATA = item("collect-data", true);
 
     static public ConfigurationItem<Integer> MAP_GLOBAL_LIMIT = item("map-global-limit", 0, "Limit-map-by-server");
     static public ConfigurationItem<Integer> MAP_PLAYER_LIMIT = item("map-player-limit", 0, "Limit-map-by-player");
