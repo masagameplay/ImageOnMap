@@ -1,6 +1,7 @@
 /*
  * Copyright (C) 2013 Moribus
  * Copyright (C) 2015 ProkopyL <prokopylmc@gmail.com>
+ * Copyright (C) 2018 Masa
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -26,9 +27,9 @@ import java.util.UUID;
 
 public class PosterMap extends ImageMap
 {
-    protected final short[] mapsIDs;
-    protected final int columnCount;
-    protected final int rowCount;
+    private final short[] mapsIDs;
+    private final int columnCount;
+    private final int rowCount;
     
     public PosterMap(UUID userUUID, short[] mapsIDs, String id, String name, int columnCount, int rowCount)
     {
@@ -52,9 +53,8 @@ public class PosterMap extends ImageMap
     @Override
     public boolean managesMap(short mapID)
     {
-        for(int i = 0; i < mapsIDs.length; i++)
-        {
-            if(mapsIDs[i] == mapID) return true;
+        for (short mapsID : mapsIDs) {
+            if (mapsID == mapID) return true;
         }
         
         return false;

@@ -1,6 +1,7 @@
 /*
  * Copyright (C) 2013 Moribus
  * Copyright (C) 2015 ProkopyL <prokopylmc@gmail.com>
+ * Copyright (C) 2018 Masa
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -15,7 +16,6 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-
 package fr.moribus.imageonmap.image;
 
 import fr.zcraft.zlib.tools.PluginLogger;
@@ -28,7 +28,7 @@ import org.bukkit.map.MapView;
 
 public class Renderer extends MapRenderer
 {
-    static public boolean isHandled(MapView map)
+    static boolean isHandled(MapView map)
     {
         if(map == null) return false;
         for(MapRenderer renderer : map.getRenderers())
@@ -38,7 +38,7 @@ public class Renderer extends MapRenderer
         return false;
     }
     
-    static public void installRenderer(PosterImage image, short[] mapsIds)
+    static void installRenderer(PosterImage image, short[] mapsIds)
     {
         for(int i = 0; i < mapsIds.length; i++)
         {
@@ -46,7 +46,7 @@ public class Renderer extends MapRenderer
         }
     }
     
-    static public void installRenderer(BufferedImage image, short mapID)
+    static void installRenderer(BufferedImage image, short mapID)
     {
         MapView map = Bukkit.getMap(mapID);
         if(map == null)
@@ -59,7 +59,7 @@ public class Renderer extends MapRenderer
         }
     }
     
-    static public Renderer installRenderer(MapView map)
+    static Renderer installRenderer(MapView map)
     {
         Renderer renderer = new Renderer();
         removeRenderers(map);
@@ -67,7 +67,7 @@ public class Renderer extends MapRenderer
         return renderer;
     }
     
-    static public void removeRenderers(MapView map)
+    private static void removeRenderers(MapView map)
     {
         for(MapRenderer renderer : map.getRenderers())
         {
@@ -77,12 +77,12 @@ public class Renderer extends MapRenderer
     
     private BufferedImage image;
     
-    protected Renderer()
+    private Renderer()
     {
         this(null);
     }
     
-    protected Renderer(BufferedImage image)
+    private Renderer(BufferedImage image)
     {
         this.image = image;
     }

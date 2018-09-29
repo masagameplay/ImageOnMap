@@ -1,6 +1,7 @@
 /*
  * Copyright (C) 2013 Moribus
  * Copyright (C) 2015 ProkopyL <prokopylmc@gmail.com>
+ * Copyright (C) 2018 Masa
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -28,12 +29,10 @@ import org.bukkit.entity.Entity;
 import org.bukkit.entity.ItemFrame;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
-import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
+import org.bukkit.event.entity.EntityPickupItemEvent;
 import org.bukkit.event.inventory.InventoryClickEvent;
-import org.bukkit.event.player.PlayerInteractEntityEvent;
 import org.bukkit.event.player.PlayerItemHeldEvent;
-import org.bukkit.event.player.PlayerPickupItemEvent;
 import org.bukkit.event.world.ChunkLoadEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.map.MapView;
@@ -78,10 +77,12 @@ public class MapInitEvent implements Listener
     }
     
     @EventHandler
-    public void onPlayerPickup(PlayerPickupItemEvent event)
+    public void onPlayerPickup(EntityPickupItemEvent event)
     {
-        ItemStack item = event.getItem().getItemStack();
-        initMap(item);
+        if(event.getEntity() instanceof Player){
+            ItemStack item = event.getItem().getItemStack();
+            initMap(item);
+        }
     }
     
     @EventHandler
@@ -97,7 +98,7 @@ public class MapInitEvent implements Listener
         }
     }
     
-    static public void initMap(ItemStack item)
+    private static void initMap(ItemStack item)
     {
         if (item != null && item.getType() == Material.MAP)
         {
@@ -110,7 +111,7 @@ public class MapInitEvent implements Listener
         initMap(Bukkit.getMap(id));
     }
     
-    static public void initMap(MapView map)
+    private static void initMap(MapView map)
     {
         if(map == null) return;
         if(Renderer.isHandled(map)) return;

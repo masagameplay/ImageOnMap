@@ -1,6 +1,7 @@
 /*
  * Copyright (C) 2013 Moribus
  * Copyright (C) 2015 ProkopyL <prokopylmc@gmail.com>
+ * Copyright (C) 2018 Masa
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -41,16 +42,16 @@ import java.util.UUID;
 public class PlayerMapStore implements ConfigurationSerializable
 {
     private final UUID playerUUID;
-    private final ArrayList<ImageMap> mapList = new ArrayList<ImageMap>();
+    private final ArrayList<ImageMap> mapList = new ArrayList<>();
     private boolean modified = false;
     private int mapCount = 0;
     
-    public PlayerMapStore(UUID playerUUID)
+    PlayerMapStore(UUID playerUUID)
     {
         this.playerUUID = playerUUID;
     }
     
-    public synchronized boolean managesMap(short mapID)
+    synchronized boolean managesMap(short mapID)
     {
         for(ImageMap map : mapList)
         {
@@ -59,7 +60,7 @@ public class PlayerMapStore implements ConfigurationSerializable
         return false;
     }
     
-    public synchronized boolean managesMap(ItemStack item)
+    synchronized boolean managesMap(ItemStack item)
     {
         if(item == null) return false;
         if(item.getType() != Material.MAP) return false;
@@ -71,13 +72,13 @@ public class PlayerMapStore implements ConfigurationSerializable
         return false;
     }
     
-    public synchronized void addMap(ImageMap map) throws MapManagerException
+    synchronized void addMap(ImageMap map) throws MapManagerException
     {
         checkMapLimit(map);
         insertMap(map);
     }
     
-    public synchronized void insertMap(ImageMap map)
+    synchronized void insertMap(ImageMap map)
     {
         _addMap(map);
         notifyModification();
@@ -89,7 +90,7 @@ public class PlayerMapStore implements ConfigurationSerializable
         mapCount += map.getMapCount();
     }
     
-    public synchronized void deleteMap(ImageMap map) throws MapManagerException
+    synchronized void deleteMap(ImageMap map) throws MapManagerException
     {
         _removeMap(map);
         notifyModification();
@@ -104,7 +105,7 @@ public class PlayerMapStore implements ConfigurationSerializable
         mapCount -= map.getMapCount();
     }
     
-    public synchronized boolean mapExists(String id)
+    private synchronized boolean mapExists(String id)
     {
         for(ImageMap map : mapList)
         {
@@ -114,7 +115,7 @@ public class PlayerMapStore implements ConfigurationSerializable
         return false;
     }
     
-    public String getNextAvailableMapID(String mapId)
+    String getNextAvailableMapID(String mapId)
     {
         if(!mapExists(mapId)) return mapId;
         int id = 0;
@@ -127,9 +128,9 @@ public class PlayerMapStore implements ConfigurationSerializable
         return mapId + "-" + id;
     }
     
-    public synchronized List<ImageMap> getMapList()
+    synchronized ArrayList<ImageMap> getMapList()
     {
-        return new ArrayList(mapList);
+        return new ArrayList<>(mapList);
     }
     
     public synchronized ImageMap[] getMaps()
@@ -137,7 +138,7 @@ public class PlayerMapStore implements ConfigurationSerializable
         return mapList.toArray(new ImageMap[mapList.size()]);
     }
     
-    public synchronized ImageMap getMap(String mapId)
+    synchronized ImageMap getMap(String mapId)
     {
         for(ImageMap map : mapList)
         {
@@ -147,12 +148,12 @@ public class PlayerMapStore implements ConfigurationSerializable
         return null;
     }
     
-    public void checkMapLimit(ImageMap map) throws MapManagerException
+    private void checkMapLimit(ImageMap map) throws MapManagerException
     {
         checkMapLimit(map.getMapCount());
     }
     
-    public void checkMapLimit(int newMapsCount) throws MapManagerException
+    void checkMapLimit(int newMapsCount) throws MapManagerException
     {
         int limit = PluginConfiguration.MAP_PLAYER_LIMIT.get();
         if(limit <= 0) return;
@@ -168,17 +169,17 @@ public class PlayerMapStore implements ConfigurationSerializable
         return playerUUID;
     }
     
-    public synchronized boolean isModified()
+    synchronized boolean isModified()
     {
         return modified;
     }
     
-    public synchronized void notifyModification()
+    synchronized void notifyModification()
     {
         this.modified = true;
     }
     
-    public synchronized int getMapCount()
+    synchronized int getMapCount()
     {
         return this.mapCount;
     }
@@ -188,8 +189,8 @@ public class PlayerMapStore implements ConfigurationSerializable
     @Override
     public Map<String, Object> serialize() 
     {
-        Map<String, Object> map = new HashMap<String, Object>();
-        ArrayList<Map> list = new ArrayList<Map>();
+        Map<String, Object> map = new HashMap<>();
+        ArrayList<Map<String, Object>> list = new ArrayList<>();
         synchronized(this)
         {
             for(ImageMap tMap : mapList)
@@ -240,7 +241,7 @@ public class PlayerMapStore implements ConfigurationSerializable
         return mapConfig;
     }
     
-    public void load()
+    void load()
     {
         if(mapsFile == null)
         {
@@ -251,7 +252,7 @@ public class PlayerMapStore implements ConfigurationSerializable
         loadFromConfig(getToolConfig().getConfigurationSection("PlayerMapStore"));
     }
     
-    public void save()
+    void save()
     {
         if(mapsFile == null || mapConfig == null) return;
         getToolConfig().set("PlayerMapStore", this.serialize());

@@ -1,6 +1,7 @@
 /*
  * Copyright (C) 2013 Moribus
  * Copyright (C) 2015 ProkopyL <prokopylmc@gmail.com>
+ * Copyright (C) 2018 Masa
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -32,7 +33,7 @@ public class SingleMap extends ImageMap
         this.mapID = mapID;
     }
     
-    public SingleMap(UUID ownerUUID, short mapID)
+    SingleMap(UUID ownerUUID, short mapID)
     {
         this(ownerUUID, mapID, null, null);
     }
@@ -57,7 +58,7 @@ public class SingleMap extends ImageMap
     
     /* ====== Serialization methods ====== */
     
-    public SingleMap(Map<String, Object> map, UUID userUUID) throws InvalidConfigurationException
+    SingleMap(Map<String, Object> map, UUID userUUID) throws InvalidConfigurationException
     {
         super(map, userUUID, Type.SINGLE);
         int _mapID = getFieldValue(map, "mapID");

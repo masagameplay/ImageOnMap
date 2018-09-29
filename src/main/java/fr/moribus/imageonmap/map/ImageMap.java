@@ -1,6 +1,7 @@
 /*
  * Copyright (C) 2013 Moribus
  * Copyright (C) 2015 ProkopyL <prokopylmc@gmail.com>
+ * Copyright (C) 2018 Masa
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -41,7 +42,7 @@ public abstract class ImageMap implements ConfigurationSerializable
     static public final int HEIGHT = 128;
 
     /// The default display name of a map
-    static public final String DEFAULT_NAME = I.t("Map");
+    private static final String DEFAULT_NAME = I.t("Map");
     
     private String id;
     private final UUID userUUID;
@@ -86,7 +87,7 @@ public abstract class ImageMap implements ConfigurationSerializable
     
     /* ====== Serialization methods ====== */
     
-    static public ImageMap fromConfig(Map<String, Object> map, UUID userUUID) throws InvalidConfigurationException
+    static ImageMap fromConfig(Map<String, Object> map, UUID userUUID) throws InvalidConfigurationException
     {
         Type mapType;
         try
@@ -127,14 +128,14 @@ public abstract class ImageMap implements ConfigurationSerializable
         return map;
     }
     
-    static protected <T> T getFieldValue(Map<String, Object> map, String fieldName) throws InvalidConfigurationException
+    static <T> T getFieldValue(Map<String, Object> map, String fieldName) throws InvalidConfigurationException
     {
         T value = getNullableFieldValue(map, fieldName);
         if(value == null) throw new InvalidConfigurationException("Field value not found for \"" + fieldName + "\"");
         return value;
     }
     
-    static protected <T> T getNullableFieldValue(Map<String, Object> map, String fieldName) throws InvalidConfigurationException
+    private static <T> T getNullableFieldValue(Map<String, Object> map, String fieldName) throws InvalidConfigurationException
     {
         try
         {
@@ -149,7 +150,7 @@ public abstract class ImageMap implements ConfigurationSerializable
     
     /* ====== Getters & Setters ====== */
     
-    public UUID getUserUUID()
+    UUID getUserUUID()
     {
         return userUUID;
     }
@@ -169,7 +170,7 @@ public abstract class ImageMap implements ConfigurationSerializable
         return mapType;
     }
 
-    public synchronized void rename(String id, String name)
+    private synchronized void rename(String id, String name)
     {
         this.id = id;
         this.name = name;

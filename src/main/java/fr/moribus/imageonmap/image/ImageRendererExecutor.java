@@ -1,6 +1,7 @@
 /*
  * Copyright (C) 2013 Moribus
  * Copyright (C) 2015 ProkopyL <prokopylmc@gmail.com>
+ * Copyright (C) 2018 Masa
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -77,26 +78,14 @@ public class ImageRendererExecutor extends Worker
     static private ImageMap renderSingle(final BufferedImage image, final UUID playerUUID) throws Throwable
     {
         MapManager.checkMapLimit(1, playerUUID);
-        final Future<Short> futureMapID = submitToMainThread(new Callable<Short>()
-        {
-            @Override
-            public Short call() throws Exception
-            {
-                return MapManager.getNewMapsIds(1)[0];
-            }
-        });
+        final Future<Short> futureMapID = submitToMainThread(() -> MapManager.getNewMapsIds(1)[0]);
 
         final short mapID = futureMapID.get();
         ImageIOExecutor.saveImage(mapID, image);
         
-        submitToMainThread(new Callable<Void>()
-        {
-            @Override
-            public Void call() throws Exception
-            {
-                Renderer.installRenderer(image, mapID);
-                return null;
-            }
+        submitToMainThread((Callable<Void>) () -> {
+            Renderer.installRenderer(image, mapID);
+            return null;
         });
         
         return MapManager.createMap(playerUUID, mapID);
@@ -108,14 +97,7 @@ public class ImageRendererExecutor extends Worker
         final int mapCount = poster.getImagesCount();
         
         MapManager.checkMapLimit(mapCount, playerUUID);
-        final Future<short[]> futureMapsIds = submitToMainThread(new Callable<short[]>()
-        {
-            @Override
-            public short[] call() throws Exception
-            {
-                return MapManager.getNewMapsIds(mapCount);
-            }
-        });
+        final Future<short[]> futureMapsIds = submitToMainThread(() -> MapManager.getNewMapsIds(mapCount));
 
         poster.splitImages();
 
@@ -123,15 +105,9 @@ public class ImageRendererExecutor extends Worker
         
         ImageIOExecutor.saveImage(mapsIDs, poster);
         
-        submitToMainThread(new Callable<Void>()
-        {
-            @Override
-            public Void call() throws Exception
-            {
-                Renderer.installRenderer(poster, mapsIDs);
-                return null;
-            }
-
+        submitToMainThread((Callable<Void>) () -> {
+            Renderer.installRenderer(poster, mapsIDs);
+            return null;
         });
         
         return MapManager.createMap(poster, playerUUID, mapsIDs);

@@ -1,6 +1,7 @@
 /*
  * Copyright (C) 2013 Moribus
  * Copyright (C) 2015 ProkopyL <prokopylmc@gmail.com>
+ * Copyright (C) 2018 Masa
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -106,7 +107,7 @@ public class ConfirmDeleteMapGui extends ActionGui
 
         /* ** Item representation of the image being deleted ** */
 
-        action("", 13, new ItemStackBuilder(Material.EMPTY_MAP)
+        action("", 13, new ItemStackBuilder(Material.MAP)
                  /// The title of the map deletion item
                 .title(I.t(getPlayerLocale(), "{red}You're about to destroy this map..."))
                  /// The end, in the lore, of a title starting with “You're about to destroy this map...”.
@@ -146,7 +147,7 @@ public class ConfirmDeleteMapGui extends ActionGui
 
     private ItemStack createSubButton(DyeColor color, String title, String[] messages)
     {
-        Dye pane = new Dye(Material.STAINED_GLASS_PANE);
+        Dye pane = new Dye(Material.GRAY_STAINED_GLASS_PANE);
         pane.setColor(color);
 
         ItemStack subButton = pane.toItemStack(1);

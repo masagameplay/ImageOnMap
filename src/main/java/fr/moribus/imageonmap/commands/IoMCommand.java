@@ -1,6 +1,7 @@
 /*
  * Copyright (C) 2013 Moribus
  * Copyright (C) 2015 ProkopyL <prokopylmc@gmail.com>
+ * Copyright (C) 2018 Masa
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -32,27 +33,24 @@ public abstract class IoMCommand extends Command
 {
 	protected ImageMap getMapFromArgs() throws CommandException
 	{
-		return getMapFromArgs(playerSender(), 0, true);
+		return getMapFromArgs(playerSender());
 	}
 
-	protected ImageMap getMapFromArgs(Player player, int index, boolean expand) throws CommandException
+	private ImageMap getMapFromArgs(Player player) throws CommandException
 	{
-		if(args.length <= index) throwInvalidArgument(I.t("You need to give a map name."));
+		if(args.length <= 0) throwInvalidArgument(I.t("You need to give a map name."));
 
 		ImageMap map;
-		String mapName = args[index];
+		StringBuilder mapName = new StringBuilder(args[0]);
 
-		if(expand)
+		for(int i = 1, c = args.length; i < c; i++)
 		{
-			for(int i = index + 1, c = args.length; i < c; i++)
-			{
-				mapName += " " + args[i];
-			}
+			mapName.append(" ").append(args[i]);
 		}
 
-		mapName = mapName.trim();
+		mapName = new StringBuilder(mapName.toString().trim());
 
-		map = MapManager.getMap(player.getUniqueId(), mapName);
+		map = MapManager.getMap(player.getUniqueId(), mapName.toString());
 
 		if(map == null) error(I.t("This map does not exist."));
 
@@ -64,7 +62,7 @@ public abstract class IoMCommand extends Command
 		return getMatchingMapNames(MapManager.getMapList(player.getUniqueId()), prefix);
 	}
 
-	protected List<String> getMatchingMapNames(Iterable<? extends ImageMap> maps, String prefix)
+	private List<String> getMatchingMapNames(Iterable<? extends ImageMap> maps, String prefix)
 	{
 		List<String> matches = new ArrayList<>();
 

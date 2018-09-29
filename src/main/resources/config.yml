@@ -7,7 +7,7 @@ lang:
 
 
 # Allows collection of anonymous statistics on plugin environment and usage
-# The statistics are publicly visible here: http://mcstats.org/plugin/ImageOnMap
+# The statistics are publicly visible here: https://bstats.org/plugin/bukkit/ImageOnMap
 collect-data: true
 
 

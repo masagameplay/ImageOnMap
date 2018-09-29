@@ -1,6 +1,7 @@
 /*
  * Copyright (C) 2013 Moribus
  * Copyright (C) 2015 ProkopyL <prokopylmc@gmail.com>
+ * Copyright (C) 2018 Masa
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -23,38 +24,29 @@ import fr.zcraft.zlib.components.i18n.I;
 import fr.zcraft.zlib.tools.PluginLogger;
 
 
-public class MigratorExecutor
-{
+public class MigratorExecutor {
     static private Thread migratorThread;
-    
-    static public void migrate()
-    {
-        if(isRunning())
-        {
+
+    static public void migrate() {
+        if (isRunning()) {
             PluginLogger.error(I.t("Migration is already running."));
             return;
         }
         migratorThread = new Thread(new V3Migrator(ImageOnMap.getPlugin()), "ImageOnMap-Migration");
         migratorThread.start();
     }
-    
-    static public boolean isRunning()
-    {
+
+    static public boolean isRunning() {
         return migratorThread != null && migratorThread.isAlive();
     }
-    
-    static public void waitForMigration()
-    {
-        if(isRunning())
-        {
+
+    static public void waitForMigration() {
+        if (isRunning()) {
             PluginLogger.info(I.t("Waiting for migration to finish..."));
 
-            try
-            {
+            try {
                 migratorThread.join();
-            }
-            catch(InterruptedException ex)
-            {
+            } catch (InterruptedException ex) {
                 PluginLogger.error(I.t("Migration thread has been interrupted while waiting to finish. It may not have ended correctly."));
             }
         }

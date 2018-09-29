@@ -1,6 +1,7 @@
 /*
  * Copyright (C) 2013 Moribus
  * Copyright (C) 2015 ProkopyL <prokopylmc@gmail.com>
+ * Copyright (C) 2018 Masa
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -37,50 +38,49 @@ import fr.zcraft.zlib.components.gui.Gui;
 import fr.zcraft.zlib.components.i18n.I18n;
 import fr.zcraft.zlib.core.ZPlugin;
 import fr.zcraft.zlib.tools.PluginLogger;
+import org.bstats.bukkit.Metrics;
 
 import java.io.File;
 import java.io.IOException;
 
-public final class ImageOnMap extends ZPlugin
-{
+public final class ImageOnMap extends ZPlugin {
     static private final String IMAGES_DIRECTORY_NAME = "images";
     static private final String MAPS_DIRECTORY_NAME = "maps";
     static private ImageOnMap plugin;
-    
+
     private File imagesDirectory;
     private final File mapsDirectory;
 
-    public ImageOnMap()
-    {
+    public ImageOnMap() {
         imagesDirectory = new File(this.getDataFolder(), IMAGES_DIRECTORY_NAME);
         mapsDirectory = new File(this.getDataFolder(), MAPS_DIRECTORY_NAME);
         plugin = this;
     }
 
-    static public ImageOnMap getPlugin()
-    {
+    static public ImageOnMap getPlugin() {
         return plugin;
     }
-    
-    public File getImagesDirectory() {return imagesDirectory;}
-    public File getMapsDirectory() {return mapsDirectory;}
-    public File getImageFile(short mapID)
-    {
-        return new File(imagesDirectory, "map"+mapID+".png");
+
+    public File getImagesDirectory() {
+        return imagesDirectory;
     }
-    
-    @SuppressWarnings ("unchecked")
+
+    public File getMapsDirectory() {
+        return mapsDirectory;
+    }
+
+    public File getImageFile(short mapID) {
+        return new File(imagesDirectory, "map" + mapID + ".png");
+    }
+
+    @SuppressWarnings("unchecked")
     @Override
-    public void onEnable()
-    {
+    public void onEnable() {
         // Creating the images and maps directories if necessary
-        try
-        {
+        try {
             imagesDirectory = checkPluginDirectory(imagesDirectory, V3Migrator.getOldImagesDirectory(this));
             checkPluginDirectory(mapsDirectory);
-        }
-        catch(IOException ex)
-        {
+        } catch (IOException ex) {
             PluginLogger.error("FATAL: " + ex.getMessage());
             this.setEnabled(false);
             return;
@@ -89,9 +89,12 @@ public final class ImageOnMap extends ZPlugin
         saveDefaultConfig();
 
         loadComponents(I18n.class, Gui.class, Commands.class, PluginConfiguration.class, ImageIOExecutor.class, ImageRendererExecutor.class);
-        
+
         //Init all the things !
-        MetricsLite.startMetrics();
+        if(PluginConfiguration.COLLECT_DATA.get()){
+            Metrics metrics = new Metrics(this);
+        }
+
         I18n.setPrimaryLocale(PluginConfiguration.LANG.get());
 
         MapManager.init();
@@ -114,23 +117,20 @@ public final class ImageOnMap extends ZPlugin
     }
 
     @Override
-    public void onDisable()
-    {
+    public void onDisable() {
         MapManager.exit();
         MapItemManager.exit();
         MigratorExecutor.waitForMigration();
 
         super.onDisable();
     }
-    
-    private File checkPluginDirectory(File primaryFile, File... alternateFiles) throws IOException
-    {
-        if(primaryFile.exists()) return primaryFile;
-        for(File file : alternateFiles)
-        {
-            if(file.exists()) return file;
+
+    private File checkPluginDirectory(File primaryFile, File... alternateFiles) throws IOException {
+        if (primaryFile.exists()) return primaryFile;
+        for (File file : alternateFiles) {
+            if (file.exists()) return file;
         }
-        if(!primaryFile.mkdirs()) 
+        if (!primaryFile.mkdirs())
             throw new IOException("Could not create '" + primaryFile.getName() + "' plugin directory.");
         return primaryFile;
     }

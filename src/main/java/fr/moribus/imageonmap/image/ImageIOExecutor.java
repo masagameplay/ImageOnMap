@@ -1,6 +1,7 @@
 /*
  * Copyright (C) 2013 Moribus
  * Copyright (C) 2015 ProkopyL <prokopylmc@gmail.com>
+ * Copyright (C) 2018 Masa
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -33,7 +34,7 @@ import java.nio.file.Files;
 @WorkerAttributes (name = "Image IO")
 public class ImageIOExecutor extends Worker
 {
-    static public void loadImage(final File file, final Renderer mapRenderer) 
+    static void loadImage(final File file, final Renderer mapRenderer)
     {
         submitQuery(new WorkerRunnable<Void>()
         {
@@ -47,7 +48,7 @@ public class ImageIOExecutor extends Worker
         });
     }
     
-    static public void saveImage(final File file, final BufferedImage image)
+    private static void saveImage(final File file, final BufferedImage image)
     {
         submitQuery(new WorkerRunnable<Void>()
         {
@@ -60,12 +61,12 @@ public class ImageIOExecutor extends Worker
         });
     }
     
-    static public void saveImage(short mapID, BufferedImage image)
+    static void saveImage(short mapID, BufferedImage image)
     {
         saveImage(ImageOnMap.getPlugin().getImageFile(mapID), image);
     }
     
-    static public void saveImage(short[] mapsIDs, PosterImage image)
+    static void saveImage(short[] mapsIDs, PosterImage image)
     {
         for(int i = 0, c = mapsIDs.length; i < c; i++)
         {
@@ -76,13 +77,12 @@ public class ImageIOExecutor extends Worker
     static public void deleteImage(ImageMap map)
     {
         short[] mapsIDs = map.getMapsIDs();
-        for(int i = 0, c = mapsIDs.length; i < c; i++)
-        {
-            deleteImage(ImageOnMap.getPlugin().getImageFile(mapsIDs[i]));
+        for (short mapsID : mapsIDs) {
+            deleteImage(ImageOnMap.getPlugin().getImageFile(mapsID));
         }
     }
     
-    static public void deleteImage(final File file)
+    private static void deleteImage(final File file)
     {
         submitQuery(new WorkerRunnable<Void>()
         {

@@ -1,6 +1,7 @@
 /*
  * Copyright (C) 2013 Moribus
  * Copyright (C) 2015 ProkopyL <prokopylmc@gmail.com>
+ * Copyright (C) 2018 Masa
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -33,7 +34,7 @@ class OldSavedMap
     private final String mapName;
     private final String userName;
     
-    public OldSavedMap(Object rawData) throws InvalidConfigurationException
+    OldSavedMap(Object rawData) throws InvalidConfigurationException
     {
         List<String> data;
         try
@@ -60,25 +61,25 @@ class OldSavedMap
         userName = data.get(2);
     }
     
-    public ImageMap toImageMap(UUID userUUID)
+    ImageMap toImageMap(UUID userUUID)
     {
         return new SingleMap(userUUID, mapId, null, mapName);
     }
     
-    public void serialize(Configuration configuration)
+    void serialize(Configuration configuration)
     {
-        ArrayList<String> data = new ArrayList<String>();
+        ArrayList<String> data = new ArrayList<>();
         data.add(Short.toString(mapId));
         data.add(mapName);
         data.add(userName);
         configuration.set(mapName, data);
     }
     
-    public boolean isMapValid()
+    boolean isMapValid()
     {
         return MapManager.mapIdExists(mapId);
     }
     
-    public short getMapId() {return mapId;}
-    public String getUserName() {return userName;}
+    short getMapId() {return mapId;}
+    String getUserName() {return userName;}
 }

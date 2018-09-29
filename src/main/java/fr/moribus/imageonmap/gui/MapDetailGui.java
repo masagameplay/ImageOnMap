@@ -1,6 +1,7 @@
 /*
  * Copyright (C) 2013 Moribus
  * Copyright (C) 2015 ProkopyL <prokopylmc@gmail.com>
+ * Copyright (C) 2018 Masa
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -47,7 +48,7 @@ public class MapDetailGui extends ExplorerGui<Short>
     @Override
     protected ItemStack getViewItem(int x, int y)
     {
-        final Material partMaterial = y % 2 == x % 2 ? Material.EMPTY_MAP : Material.PAPER;
+        final Material partMaterial = y % 2 == x % 2 ? Material.MAP : Material.PAPER;
 
         final ItemStackBuilder builder = new ItemStackBuilder(partMaterial)
                 .title(I.t(getPlayerLocale(), "{green}Map part"))
@@ -64,7 +65,7 @@ public class MapDetailGui extends ExplorerGui<Short>
     protected ItemStack getViewItem(Short mapId)
     {
         final int index = ((PosterMap) map).getIndex(mapId);
-        final Material partMaterial = index % 2 == 0 ? Material.EMPTY_MAP : Material.PAPER;
+        final Material partMaterial = index % 2 == 0 ? Material.MAP : Material.PAPER;
 
         final ItemStackBuilder builder = new ItemStackBuilder(partMaterial)
                 .title(I.t(getPlayerLocale(), "{green}Map part"))
@@ -149,7 +150,7 @@ public class MapDetailGui extends ExplorerGui<Short>
 
         if (canRename)
         {
-            action("rename", renameSlot, new ItemStackBuilder(Material.BOOK_AND_QUILL)
+            action("rename", renameSlot, new ItemStackBuilder(Material.WRITABLE_BOOK)
                     .title(I.t(getPlayerLocale(), "{blue}Rename this image"))
                     .longLore(I.t(getPlayerLocale(), "{gray}Click here to rename this image; this is used for your own organization."))
             );
@@ -192,26 +193,21 @@ public class MapDetailGui extends ExplorerGui<Short>
             return;
         }
 
-        PromptGui.prompt(getPlayer(), new Callback<String>()
-        {
-            @Override
-            public void call(String newName)
+        PromptGui.prompt(getPlayer(), newName -> {
+            if (!Permissions.RENAME.grantedTo(getPlayer()))
             {
-                if (!Permissions.RENAME.grantedTo(getPlayer()))
-                {
-                    I.sendT(getPlayer(), "{ce}You are no longer allowed to do that.");
-                    return;
-                }
-
-                if (newName == null || newName.isEmpty())
-                {
-                    I.sendT(getPlayer(), "{ce}Map names can't be empty.");
-                    return;
-                }
-
-                map.rename(newName);
-                I.sendT(getPlayer(), "{cs}Map successfully renamed.");
+                I.sendT(getPlayer(), "{ce}You are no longer allowed to do that.");
+                return;
             }
+
+            if (newName == null || newName.isEmpty())
+            {
+                I.sendT(getPlayer(), "{ce}Map names can't be empty.");
+                return;
+            }
+
+            map.rename(newName);
+            I.sendT(getPlayer(), "{cs}Map successfully renamed.");
         }, map.getName(), this);
     }
 

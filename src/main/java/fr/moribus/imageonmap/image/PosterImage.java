@@ -1,6 +1,7 @@
 /*
  * Copyright (C) 2013 Moribus
  * Copyright (C) 2015 ProkopyL <prokopylmc@gmail.com>
+ * Copyright (C) 2018 Masa
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -40,7 +41,7 @@ public class PosterImage
      * Creates a new Poster from an entire image
      * @param originalImage the original image
      */
-    public PosterImage(BufferedImage originalImage)
+    PosterImage(BufferedImage originalImage)
     {
         this.originalImage = originalImage;
         calculateDimensions();
@@ -63,7 +64,7 @@ public class PosterImage
         cutImagesCount = columns * lines;
     }
     
-    public void splitImages()
+    void splitImages()
     {
         cutImages = new BufferedImage[cutImagesCount];
         
@@ -109,7 +110,7 @@ public class PosterImage
         return cutImages;
     }
     
-    public BufferedImage getImageAt(int i)
+    BufferedImage getImageAt(int i)
     {
         return cutImages[i];
     }

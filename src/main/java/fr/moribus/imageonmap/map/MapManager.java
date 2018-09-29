@@ -1,6 +1,7 @@
 /*
  * Copyright (C) 2013 Moribus
  * Copyright (C) 2015 ProkopyL <prokopylmc@gmail.com>
+ * Copyright (C) 2018 Masa
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -33,12 +34,13 @@ import org.bukkit.scheduler.BukkitTask;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 import java.util.UUID;
 
 abstract public class MapManager
 {
     static private final long SAVE_DELAY = 200;
-    static private final ArrayList<PlayerMapStore> playerMaps = new ArrayList<PlayerMapStore>();
+    static private final ArrayList<PlayerMapStore> playerMaps = new ArrayList<>();
     static private BukkitTask autosaveTask;
     
     static public void init()
@@ -112,7 +114,7 @@ abstract public class MapManager
         return mapsIds;
     }
     
-    static public void addMap(ImageMap map) throws MapManagerException
+    private static void addMap(ImageMap map) throws MapManagerException
     {
         getPlayerMapStore(map.getUserUUID()).addMap(map);
     }
@@ -135,7 +137,7 @@ abstract public class MapManager
             Bukkit.getScheduler().runTaskLater(ImageOnMap.getPlugin(), new AutosaveRunnable(), SAVE_DELAY);
     }
     
-    static public String getNextAvailableMapID(String mapId, UUID playerUUID)
+    static String getNextAvailableMapID(String mapId, UUID playerUUID)
     {
         return getPlayerMapStore(playerUUID).getNextAvailableMapID(mapId);
     }
@@ -173,7 +175,7 @@ abstract public class MapManager
      * @param mapId The ID of the Minecraft map.
      * @return The {@link ImageMap}.
      */
-    static public ImageMap getMap(short mapId)
+    private static ImageMap getMap(short mapId)
     {
         synchronized(playerMaps)
         {
@@ -249,10 +251,10 @@ abstract public class MapManager
         }
     }
     
-    static public void load()
+    private static void load()
     {
         int loadedFilesCount = 0;
-        for(File file : ImageOnMap.getPlugin().getMapsDirectory().listFiles())
+        for(File file : Objects.requireNonNull(ImageOnMap.getPlugin().getMapsDirectory().listFiles()))
         {
             UUID uuid = getUUIDFromFile(file);
             if(uuid == null) continue;
